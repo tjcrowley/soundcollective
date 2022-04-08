@@ -21,6 +21,136 @@
 	{% block scripts %}
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="{{ STATIC_URL }}/js/main.js"></script>
+        <!-- Affirm -->
+<script>
+ /**************************************************************\
+            Include Affirm.js Snippet
+\**************************************************************/
+var _affirm_config = {
+  public_api_key: "XTWFXBS1RQWBI1KL",
+  /* replace with public api key */
+  script: "https://cdn1.affirm.com/js/v2/affirm.js"
+};
+(function(l, g, m, e, a, f, b) {
+  var d, c = l[m] || {},
+    h = document.createElement(f),
+    n = document.getElementsByTagName(f)[0],
+    k = function(a, b, c) {
+      return function() {
+        a[b]._.push([c, arguments])
+      }
+    };
+  c[e] = k(c, e, "set");
+  d = c[e];
+  c[a] = {};
+  c[a]._ = [];
+  d._ = [];
+  c[a][b] = k(c, a, b);
+  a = 0;
+  for (b = "set add save post open empty reset on off trigger ready setProduct".split(" "); a < b.length; a++) d[b[a]] = k(c, e, b[a]);
+  a = 0;
+  for (b = ["get", "token", "url", "items"]; a < b.length; a++) d[b[a]] = function() {};
+  h.async = !0;
+  h.src = g[f];
+  n.parentNode.insertBefore(h, n);
+  delete g[f];
+  d(g);
+  l[m] = c
+})(window, _affirm_config, "affirm", "checkout", "ui", "script", "ready");
+
+var checkout_mode = "modal";
+
+var rad = document.checkout_mode_select.checkout_mode;
+var prev = null;
+for (var i = 0; i < rad.length; i++) {
+  rad[i].onclick = function() {
+    console.log(this.value);
+    checkout_mode = this.value;
+  };
+}
+
+
+/**************************************************************\
+          Set Affirm Checkout Values
+\**************************************************************/
+
+
+
+
+/**************************************************************\
+              Handle the form submission
+\**************************************************************/
+$("#submit-form").click(function() {
+  affirm.checkout({
+
+    "config": {
+      "financial_product_key": "WARIIS19HH8IZGX1", //replace with your Affirm financial product key
+    },
+
+    "merchant": {
+      "user_cancel_url": "https://google.com",
+      "user_confirmation_url": "https://google.com",
+      "user_confirmation_url_action": "POST"
+    },
+
+    "metadata": {
+      "mode": checkout_mode
+    },
+
+    //shipping contact
+    "shipping": {
+      "name": {
+        "first": "John",
+        "last": "Doe"
+        // You can also include the full name
+        // "full" : "John Doe"
+      },
+      "address": {
+        "line1": "225 Bush Street",
+        "line2": "Floor 16",
+        "city": "San Francisco",
+        "state": "CA",
+        "zipcode": "94104"
+      },
+      "email": "joe.doe@email.com",
+      "phone_number": "4155555555"
+    },
+
+    // cart
+    "items": [{
+      "display_name": "Acme SLR-NG",
+      "sku": "ACME-SLR-NG-01",
+      "unit_price": 1500,
+      "qty": 1,
+      "item_image_url": "https://examplemerchant.com/static/item.png",
+      "item_url": "https://examplemerchant.com/acme-slr-ng-01.htm",
+    }],
+
+    // pricing / charge amount
+    "currency": "USD",
+    "discounts": {
+      "savemoney123": {
+        "discount_amount": 500
+      }
+    },
+    "tax_amount": 199,
+    "shipping_amount": 399,
+    "total": 1598
+  });
+  console.log(checkout_mode);
+  affirm.checkout.open({
+    onFail: function(a) {
+      console.log(a)
+    },
+    onSuccess: function(a) {
+      console.log(a)
+    }
+  });
+  //    affirm.checkout.open();
+});
+
+</script>
+<!-- End Affirm -->
 	{% endblock %}
 </body>
 </html>
